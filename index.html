@@ -63,51 +63,41 @@
     </div>
   </section>
 
-  <section id="pedido" data-screen-label="Pedido" style="max-width:720px; margin:0 auto; padding:40px 16px 130px; scroll-margin-top:12px">
+  <section id="pedido" data-screen-label="Pedido" style="max-width:720px; margin:0 auto; padding:40px 16px 40px; scroll-margin-top:12px">
     <div style="background:#FFFFFF; border:3px solid #2B1A12; border-radius:24px; box-shadow:6px 6px 0 #2B1A12; padding:clamp(16px,4vw,36px); display:flex; flex-direction:column; gap:22px">
       <h2 style="margin:0; font-family:'Alfa Slab One', Georgia, serif; font-weight:400; font-size:clamp(34px,5vw,48px); line-height:1">Tu pedido</h2>
 
       <div style="display:flex; flex-direction:column; gap:12px">
-        <p style="margin:0; font-size:14px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#C4461C">1 · ¿Cuántos platos?</p>
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; background:#F6EEDF; border-radius:16px; padding:12px">
-          <button onClick="{{ menos }}" aria-label="Quitar un plato" style="width:60px; height:60px; border-radius:14px; border:3px solid #2B1A12; background:#FFFFFF; color:#2B1A12; font-size:30px; font-weight:800; line-height:1" style-active="transform:scale(.94)">−</button>
-          <div style="display:flex; flex-direction:column; align-items:center; gap:6px">
-            <span style="font-family:'Alfa Slab One', Georgia, serif; font-size:56px; line-height:1.05">{{ platos }}</span>
-            <span style="font-size:14px; font-weight:700; color:#5A4034">{{ platosTxt }}</span>
+        <p style="margin:0; font-size:14px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#C4461C">1 · Elige tus platos</p>
+        <sc-for list="{{ platosList }}" as="p" hint-placeholder-count="2">
+          <div style="display:flex; align-items:center; gap:12px; background:{{ p.bg }}; color:{{ p.color }}; border:3px solid #2B1A12; border-radius:16px; padding:14px">
+            <div style="display:flex; flex-direction:column; gap:3px; flex:1; min-width:0">
+              <span style="font-size:18px; font-weight:800">{{ p.nombre }}</span>
+              <span style="font-size:14px; font-weight:500">{{ p.detalle }}</span>
+              <span style="font-family:'Alfa Slab One', Georgia, serif; font-size:22px; margin-top:2px">{{ p.precio }}</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; flex-shrink:0">
+              <button onClick="{{ p.menos }}" aria-label="Quitar" style="width:48px; height:48px; border-radius:12px; border:3px solid {{ p.color }}; background:transparent; color:{{ p.color }}; font-size:24px; font-weight:800; line-height:1" style-active="transform:scale(.94)">−</button>
+              <span style="font-family:'Alfa Slab One', Georgia, serif; font-size:30px; min-width:32px; text-align:center">{{ p.n }}</span>
+              <button onClick="{{ p.mas }}" aria-label="Agregar" style="width:48px; height:48px; border-radius:12px; border:none; background:#C4461C; color:#F6EEDF; font-size:24px; font-weight:800; line-height:1" style-active="transform:scale(.94)">+</button>
+            </div>
           </div>
-          <button onClick="{{ mas }}" aria-label="Agregar un plato" style="width:60px; height:60px; border-radius:14px; border:none; background:#C4461C; color:#F6EEDF; font-size:30px; font-weight:800; line-height:1" style-active="transform:scale(.94)">+</button>
-        </div>
+        </sc-for>
       </div>
 
       <div style="display:flex; flex-direction:column; gap:12px">
-        <p style="margin:0; font-size:14px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#C4461C">2 · ¿Lo quieres más completo?</p>
-        <button onClick="{{ toggleExtra }}" style="display:flex; align-items:center; gap:14px; text-align:left; width:100%; background:{{ extraBg }}; color:{{ extraColor }}; border:3px solid #2B1A12; border-radius:16px; padding:16px">
-          <span style="flex-shrink:0; width:30px; height:30px; border-radius:8px; border:3px solid {{ extraColor }}; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:900">{{ extraCheck }}</span>
-          <span style="display:flex; flex-direction:column; gap:3px; flex:1">
-            <span style="font-size:18px; font-weight:800">{{ extraNombre }}</span>
-            <span style="font-size:14px; font-weight:500">{{ extraDetalle }}</span>
-          </span>
-          <span style="font-family:'Alfa Slab One', Georgia, serif; font-size:20px; white-space:nowrap">+$0.50</span>
-        </button>
-        <div style="display:flex; flex-direction:column; background:{{ gmBg }}; color:{{ gmColor }}; border:3px solid #2B1A12; border-radius:16px; overflow:hidden">
-          <button onClick="{{ toggleGm }}" style="display:flex; align-items:center; gap:14px; text-align:left; width:100%; background:transparent; color:inherit; border:none; padding:14px">
-            <span style="flex-shrink:0; width:30px; height:30px; border-radius:8px; border:3px solid {{ gmColor }}; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:900">{{ gmCheck }}</span>
-            <span style="display:flex; flex-direction:column; gap:3px; flex:1">
-              <span style="font-size:18px; font-weight:800">Porción de guagua mama</span>
-              <span style="font-size:14px; font-weight:500">Se agrega aparte a tu pedido</span>
-            </span>
-            <span style="font-family:'Alfa Slab One', Georgia, serif; font-size:20px; white-space:nowrap">+$1.00</span>
-          </button>
-          <sc-if value="{{ gmOn }}" hint-placeholder-val="{{ false }}">
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:0 16px 14px 60px">
-              <span style="font-size:14px; font-weight:700">Porciones</span>
-              <div style="display:flex; align-items:center; gap:10px">
-                <button onClick="{{ gmMenos }}" aria-label="Quitar una porción" style="width:44px; height:44px; border-radius:10px; border:2px solid #F6EEDF; background:transparent; color:#F6EEDF; font-size:22px; font-weight:800; line-height:1">−</button>
-                <span style="font-family:'Alfa Slab One', Georgia, serif; font-size:26px; min-width:28px; text-align:center">{{ gm }}</span>
-                <button onClick="{{ gmMas }}" aria-label="Agregar una porción" style="width:44px; height:44px; border-radius:10px; border:none; background:#C4461C; color:#F6EEDF; font-size:22px; font-weight:800; line-height:1">+</button>
+        <p style="margin:0; font-size:14px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#C4461C">2 · Porciones extra · $1.00 c/u</p>
+        <div style="display:flex; flex-direction:column; border:3px solid #2B1A12; border-radius:16px; overflow:hidden">
+          <sc-for list="{{ extrasList }}" as="e" hint-placeholder-count="5">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 12px 10px 16px; background:{{ e.bg }}; color:{{ e.color }}; border-top:{{ e.borde }}">
+              <span style="font-size:17px; font-weight:800">{{ e.nombre }}</span>
+              <div style="display:flex; align-items:center; gap:8px">
+                <button onClick="{{ e.menos }}" aria-label="Quitar" style="width:44px; height:44px; border-radius:10px; border:2px solid {{ e.color }}; background:transparent; color:{{ e.color }}; font-size:22px; font-weight:800; line-height:1">−</button>
+                <span style="font-family:'Alfa Slab One', Georgia, serif; font-size:24px; min-width:28px; text-align:center">{{ e.n }}</span>
+                <button onClick="{{ e.mas }}" aria-label="Agregar" style="width:44px; height:44px; border-radius:10px; border:none; background:#C4461C; color:#F6EEDF; font-size:22px; font-weight:800; line-height:1">+</button>
               </div>
             </div>
-          </sc-if>
+          </sc-for>
         </div>
       </div>
 
@@ -125,19 +115,24 @@
       </div>
 
       <div style="border-top:3px dashed #2B1A12; padding-top:18px; display:flex; flex-direction:column; gap:8px">
-        <div style="display:flex; justify-content:space-between; gap:12px; font-size:16px; font-weight:600"><span>{{ lineaPlatos }}</span><span>{{ subPlatos }}</span></div>
-        <sc-if value="{{ extra }}" hint-placeholder-val="{{ false }}">
-          <div style="display:flex; justify-content:space-between; gap:12px; font-size:16px; font-weight:600"><span>{{ lineaExtra }}</span><span>{{ subExtra }}</span></div>
-        </sc-if>
-        <sc-if value="{{ gmOn }}" hint-placeholder-val="{{ false }}">
-          <div style="display:flex; justify-content:space-between; gap:12px; font-size:16px; font-weight:600"><span>{{ lineaGm }}</span><span>{{ subGm }}</span></div>
-        </sc-if>
+        <sc-for list="{{ lineas }}" as="l" hint-placeholder-count="1">
+          <div style="display:flex; justify-content:space-between; gap:12px; font-size:16px; font-weight:600"><span>{{ l.t }}</span><span>{{ l.v }}</span></div>
+        </sc-for>
         <div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-top:6px">
           <span style="font-size:15px; font-weight:800; letter-spacing:.1em; text-transform:uppercase">Total</span>
           <span style="font-family:'Alfa Slab One', Georgia, serif; font-size:44px; line-height:1; color:#C4461C">{{ total }}</span>
         </div>
       </div>
     </div>
+  </section>
+
+  <section id="ubicacion" data-screen-label="Ubicación" style="max-width:720px; margin:0 auto; padding:8px 16px 130px; display:flex; flex-direction:column; gap:16px">
+    <h2 style="margin:0; font-family:'Alfa Slab One', Georgia, serif; font-weight:400; font-size:clamp(34px,5vw,48px); line-height:1">Dónde estamos</h2>
+    <p style="margin:0; font-size:17px; font-weight:600; color:#5A4034; text-wrap:pretty">Junto al Parque Dos Culturas</p>
+    <div style="border:3px solid #2B1A12; border-radius:24px; box-shadow:6px 6px 0 #2B1A12; overflow:hidden; background:#FFFFFF">
+      <iframe title="Mapa Fritada Doña Susy" src="https://maps.google.com/maps?q=-1.257126,-78.638930&amp;z=17&amp;output=embed" loading="lazy" style="display:block; width:100%; height:300px; border:0"></iframe>
+    </div>
+    <a href="https://www.google.com/maps/search/?api=1&amp;query=-1.257126,-78.638930" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:center; min-height:56px; background:#FFFFFF; color:#2B1A12; border:3px solid #2B1A12; border-radius:14px; font-size:16px; font-weight:800; letter-spacing:.03em; text-transform:uppercase" style-active="transform:scale(.97)">Cómo llegar</a>
   </section>
 
   <div style="position:fixed; left:0; right:0; bottom:0; z-index:20; background:#2B1A12; border-top:3px solid #C4461C; padding:12px 16px calc(12px + env(safe-area-inset-bottom))">
@@ -152,46 +147,41 @@
 
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;extraNombre&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Porción extra de chancho&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Upsell&quot;},&quot;extraDetalle&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Más fritada en cada plato&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Upsell&quot;},&quot;precio&quot;:{&quot;editor&quot;:&quot;float&quot;,&quot;default&quot;:4,&quot;tsType&quot;:&quot;number&quot;,&quot;min&quot;:1,&quot;max&quot;:20,&quot;step&quot;:0.25,&quot;section&quot;:&quot;Pedido&quot;},&quot;whatsapp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;593984207017&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Pedido&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;precio&quot;:{&quot;editor&quot;:&quot;float&quot;,&quot;default&quot;:4,&quot;tsType&quot;:&quot;number&quot;,&quot;min&quot;:1,&quot;max&quot;:20,&quot;step&quot;:0.25,&quot;section&quot;:&quot;Pedido&quot;},&quot;precioGm&quot;:{&quot;editor&quot;:&quot;float&quot;,&quot;default&quot;:5,&quot;tsType&quot;:&quot;number&quot;,&quot;min&quot;:1,&quot;max&quot;:20,&quot;step&quot;:0.25,&quot;section&quot;:&quot;Pedido&quot;},&quot;whatsapp&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;593984207017&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Pedido&quot;}}">
 class Component extends DCLogic {
-  state = { platos: 1, extra: false, modo: 'Retiro', nombre: '', direccion: '' };
+  state = { p1: 1, p2: 0, ex: {}, modo: 'Retiro', nombre: '', direccion: '' };
   renderVals() {
     const s = this.state;
-    const precio = Number(this.props.precio ?? 4);
-    const extraNombre = this.props.extraNombre || 'Porción extra de chancho';
-    const extraDetalle = this.props.extraDetalle || 'Más fritada en cada plato';
+    const pr1 = Number(this.props.precio ?? 4), pr2 = Number(this.props.precioGm ?? 5);
     const tel = String(this.props.whatsapp || '593984207017').replace(/\D/g, '');
     const $ = v => '$' + v.toFixed(2);
-    const gm = s.gm || 0, subG = gm * 1;
-    const subP = s.platos * precio, subE = s.extra ? s.platos * 0.5 : 0, tot = subP + subE + subG;
-    const pl = n => n + (n === 1 ? ' plato' : ' platos');
-    const msg = ['Hola Doña Susy, quiero pedir fritada:', '',
-      '• ' + pl(s.platos) + ' de fritada — ' + $(subP),
-      s.extra ? '• ' + extraNombre + ' x' + s.platos + ' — ' + $(subE) : '',
-      gm ? '• Porción de guagua mama x' + gm + ' — ' + $(subG) : '',
-      '', 'Total: ' + $(tot),
+    const clamp = n => Math.max(0, Math.min(30, n));
+    const platos = [
+      { k: 'p1', nombre: 'Plato de fritada', detalle: 'Fritada con sus acompañantes', pr: pr1 },
+      { k: 'p2', nombre: 'Plato con guagua mama', detalle: 'Fritada + incluye guagua mama', pr: pr2 }
+    ];
+    const extras = ['Mote', 'Maduro', 'Tostado', 'Papa', 'Riñón'];
+    const lineas = [];
+    let tot = 0;
+    platos.forEach(p => { const n = s[p.k]; if (n) { tot += n * p.pr; lineas.push({ t: p.nombre + ' × ' + n, v: $(n * p.pr) }); } });
+    extras.forEach(e => { const n = s.ex[e] || 0; if (n) { tot += n; lineas.push({ t: e + ' extra × ' + n, v: $(n) }); } });
+    const setEx = (e, d) => this.setState(st => ({ ex: { ...st.ex, [e]: clamp((st.ex[e] || 0) + d) } }));
+    const msg = ['Hola Doña Susy, quiero pedir:', '', ...lineas.map(l => '• ' + l.t + ' — ' + l.v), '', 'Total: ' + $(tot),
       s.modo === 'Domicilio' ? 'Entrega a domicilio' + (s.direccion ? ': ' + s.direccion : '') : 'Paso a retirar',
-      s.nombre ? 'Nombre: ' + s.nombre : ''].filter((x, i, a) => x !== '' || (i > 0 && a[i - 1] !== '')).join('\n');
+      s.nombre ? 'Nombre: ' + s.nombre : ''].filter((x, i) => x || i === 1 || i === lineas.length + 2).join('\n');
     return {
-      platos: s.platos, platosTxt: s.platos === 1 ? 'plato' : 'platos',
-      menos: () => this.setState({ platos: Math.max(1, s.platos - 1) }),
-      mas: () => this.setState({ platos: Math.min(30, s.platos + 1) }),
-      extra: s.extra, toggleExtra: () => this.setState({ extra: !s.extra }),
-      extraBg: s.extra ? '#2B1A12' : '#FFFFFF', extraColor: s.extra ? '#F6EEDF' : '#2B1A12', extraCheck: s.extra ? '✓' : '',
-      extraNombre, extraDetalle: extraDetalle + ' · se suma a tus ' + pl(s.platos),
+      platosList: platos.map(p => { const n = s[p.k]; return { nombre: p.nombre, detalle: p.detalle, precio: $(p.pr), n,
+        bg: n ? '#2B1A12' : '#FFFFFF', color: n ? '#F6EEDF' : '#2B1A12',
+        menos: () => this.setState(st => ({ [p.k]: clamp(st[p.k] - 1) })), mas: () => this.setState(st => ({ [p.k]: clamp(st[p.k] + 1) })) }; }),
+      extrasList: extras.map((e, i) => { const n = s.ex[e] || 0; return { nombre: e, n,
+        bg: n ? '#2B1A12' : '#FFFFFF', color: n ? '#F6EEDF' : '#2B1A12', borde: i ? '2px solid #2B1A12' : 'none',
+        menos: () => setEx(e, -1), mas: () => setEx(e, 1) }; }),
+      lineas: lineas.length ? lineas : [{ t: 'Elige al menos un plato', v: '' }],
       modos: ['Retiro', 'Domicilio'].map(l => ({ l: l === 'Retiro' ? 'Paso a retirar' : 'A domicilio', bg: s.modo === l ? '#C4461C' : '#FFFFFF', color: s.modo === l ? '#F6EEDF' : '#2B1A12', set: () => this.setState({ modo: l }) })),
       esDomicilio: s.modo === 'Domicilio',
       nombre: s.nombre, direccion: s.direccion,
       setNombre: e => this.setState({ nombre: e.target.value }),
       setDireccion: e => this.setState({ direccion: e.target.value }),
-      lineaPlatos: pl(s.platos) + ' × ' + $(precio), subPlatos: $(subP),
-      lineaExtra: extraNombre + ' × ' + s.platos, subExtra: $(subE),
-      gm, gmOn: gm > 0, gmCheck: gm > 0 ? '✓' : '',
-      gmBg: gm > 0 ? '#2B1A12' : '#FFFFFF', gmColor: gm > 0 ? '#F6EEDF' : '#2B1A12',
-      toggleGm: () => this.setState({ gm: gm > 0 ? 0 : 1 }),
-      gmMenos: () => this.setState({ gm: Math.max(0, gm - 1) }),
-      gmMas: () => this.setState({ gm: Math.min(30, gm + 1) }),
-      lineaGm: 'Guagua mama × ' + gm, subGm: $(subG),
       total: $(tot),
       wa: 'https://wa.me/' + tel + '?text=' + encodeURIComponent(msg)
     };
